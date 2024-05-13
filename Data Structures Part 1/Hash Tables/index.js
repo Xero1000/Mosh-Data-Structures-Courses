@@ -320,6 +320,39 @@ hashTable.put(8, "B") // 3
 hashTable.put(11, "C") // 1
 hashTable.put(6, "A+")
 hashTable.put(1, "D")
-hashTable.remove(16)
-console.log(hashTable.get(6))
-console.log(hashTable)
+//hashTable.remove(16)
+// console.log(hashTable.get(6))
+// console.log(hashTable)
+
+
+// EXERCISES
+// -------------
+
+function getMostRepeatedInteger(integers) {
+    let integerCounts = {}
+
+    for (let i = 0; i < integers.length; i++) {
+        if (integers[i] in integerCounts) {
+            integerCounts[integers[i]] += 1
+        }
+        else {
+            integerCounts[integers[i]] = 1
+        }
+    }
+
+    let mostRepeated = null
+    for (integer in integerCounts) {
+        if (mostRepeated === null) {
+            mostRepeated = integer
+            continue
+        }
+        
+        if (integerCounts[integer] > integerCounts[mostRepeated]) {
+            mostRepeated = integer
+        }
+    }
+
+    return mostRepeated
+}
+
+console.log(getMostRepeatedInteger([1, 1, 2, 2, 3, 3, 3, 4]))
