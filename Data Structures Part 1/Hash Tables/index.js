@@ -328,6 +328,7 @@ hashTable.put(1, "D")
 // EXERCISES
 // -------------
 
+// O(n)
 function getMostRepeatedInteger(integers) {
     let integerCounts = {}
 
@@ -340,13 +341,8 @@ function getMostRepeatedInteger(integers) {
         }
     }
 
-    let mostRepeated = null
+    let mostRepeated = integers[0]
     for (integer in integerCounts) {
-        if (mostRepeated === null) {
-            mostRepeated = integer
-            continue
-        }
-        
         if (integerCounts[integer] > integerCounts[mostRepeated]) {
             mostRepeated = integer
         }
@@ -355,4 +351,24 @@ function getMostRepeatedInteger(integers) {
     return mostRepeated
 }
 
-console.log(getMostRepeatedInteger([1, 1, 2, 2, 3, 3, 3, 4]))
+//console.log(getMostRepeatedInteger([1, 1, 2, 2, 3, 3, 3, 4]))
+
+// O(n)
+function getUniquePairsWithDifferenceK(integers, k) {
+    let set = new Set(integers)
+    let pairCount = 0;
+    
+    set.forEach(value => {
+        if (set.has(value + k)) {
+            pairCount++
+        }
+        if (set.has(value - k)) {
+            pairCount++
+        }
+        set.delete(value)
+    })
+
+    return pairCount
+}
+
+console.log(getUniquePairsWithDifferenceK([1, 7, 5, 9, 2, 12, 3], 2))
