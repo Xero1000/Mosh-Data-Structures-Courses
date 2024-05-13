@@ -371,4 +371,22 @@ function getUniquePairsWithDifferenceK(integers, k) {
     return pairCount
 }
 
-console.log(getUniquePairsWithDifferenceK([1, 7, 5, 9, 2, 12, 3], 2))
+// console.log(getUniquePairsWithDifferenceK([1, 7, 5, 9, 2, 12, 3], 2))
+
+// O(n)
+function twoSum(integers, target) {
+    let indices = {}
+
+    for (let i = 0; i < integers.length; i++) {
+        let difference = target - integers[i]
+        
+        if (difference in indices) {
+            return [i, indices[difference]]
+        }
+        indices[integers[i]] = i
+    }
+
+    return null
+}
+
+console.log(twoSum([2, 7, 11, 15], 9))
