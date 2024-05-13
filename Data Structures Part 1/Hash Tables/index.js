@@ -389,4 +389,75 @@ function twoSum(integers, target) {
     return null
 }
 
-console.log(twoSum([2, 7, 11, 15], 9))
+// console.log(twoSum([2, 7, 11, 15], 9))
+
+class LinearProbeHashTable {
+    #values = []
+    #count = 0
+    #size = 0
+
+    constructor(size) {
+        for (let i = 0; i < size; i++) {
+            this.#values.push(null)
+        }
+        this.#size = size
+    }
+
+    // O(n)
+    put(key, value) {
+        if (this.#count === this.#size) {
+            throw new Error("Table is full")
+        }
+        let index = this.#hashKey(key)
+
+        while (this.#values[index] !== null) {
+            index = (index + 1) % this.#size
+        }
+
+        this.#values[index] = value
+        this.#count++
+    }
+
+    // O(1)
+    get(key) {
+        let hashedKey = this.#hashKey(key)
+        return this.#values[hashedKey]
+    }
+
+    // O(1)
+    remove(key) {
+        let hashedKey = this.#hashKey(key)
+        if (this.#values[hashedKey] === null) {
+            throw new Error("No data to remove for this key")
+        }
+
+        this.#values[hashedKey] = null
+        this.#count--
+    }
+
+    // O(1)
+    size() {
+        return this.#count
+    }
+
+    getTable() {
+        return this.#values
+    }
+
+    #hashKey(key) {
+        return key % this.#size
+    }
+}
+
+let lpht = new LinearProbeHashTable(7)
+lpht.put(1, "Sam")
+lpht.put(1, "Mike")
+lpht.put(10, "Derek")
+lpht.put(10, "Sara")
+lpht.put(16, "Mathilda")
+lpht.put(27, "Elijah")
+lpht.put(28, "Hugo")
+console.log(lpht.get(7))
+lpht.remove(4)
+console.log(lpht.size())
+console.log(lpht.getTable())
