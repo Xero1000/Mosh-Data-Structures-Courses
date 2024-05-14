@@ -56,6 +56,20 @@ class BinarySearchTree {
         return false
     }
 
+    height() {
+        if (this.#root === null) 
+            return -1
+
+        return this.#height(this.#root)
+    }
+
+    #height(root) {
+        if (root.leftChild === null && root.rightChild === null)
+            return 0
+
+        return 1 + Math.max(this.#height(root.leftChild), this.#height(root.rightChild))
+    }
+
     traversePreOrder() {
         this.#traversePreOrder(this.#root)
     }
@@ -105,7 +119,8 @@ bst.insert(6)
 bst.insert(8)
 bst.insert(10)
 //console.log(bst.find(8))
-bst.traversePostOrder()
+//bst.traversePostOrder()
+console.log(bst.height())
 
 
 // f(3)
