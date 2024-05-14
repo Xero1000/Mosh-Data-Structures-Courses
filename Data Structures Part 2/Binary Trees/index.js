@@ -58,6 +58,12 @@ class BinaryTree {
         return false // if one of the two nodes is null, that means the trees are not equal
     }
 
+    swapRoot() {
+        let temp = this.#root.leftChild.value
+        this.#root.leftChild.value = this.#root.rightChild.value
+        this.#root.rightChild.value = temp
+    }
+
     find(value) {
         let currentNode = this.#root
         while (currentNode !== null) {
@@ -76,6 +82,24 @@ class BinaryTree {
 
     getRoot() {
         return this.#root
+    }
+
+    getNodesFromKDistance(k) {
+        let list = []
+        this.#getNodesFromKDistance(this.#root, k, list)
+        return list
+    }
+
+    #getNodesFromKDistance(root, k, list) {
+        if (root === null) 
+            return
+        if (k === 0) {
+            list.push(root.value)
+            return
+        }
+
+        this.#getNodesFromKDistance(root.leftChild, k - 1, list) 
+        this.#getNodesFromKDistance(root.rightChild, k - 1, list)
     }
 
     
@@ -152,6 +176,21 @@ class BinaryTree {
         this.#traversePostOrder(root.rightChild)
         console.log(root.value)
     }
+
+    validate() {
+        return this.#validate(this.#root, -Infinity, Infinity)
+    }
+
+    #validate(root, min, max) {
+        if (root === null)
+            return true 
+        
+        if (root.value < min || root.value > max)
+            return false
+
+        return this.#validate(root.leftChild, min, root.value - 1)
+            && this.#validate(root.rightChild, root.value + 1, max)
+    }
 }
 
 let tree = new BinaryTree()
@@ -171,12 +210,24 @@ tree2.insert(1)
 tree2.insert(6)
 tree2.insert(8)
 tree2.insert(10)
+
+let tree3 = new BinaryTree()
+tree3.insert(20)
+tree3.insert(10)
+tree3.insert(30)
+tree3.insert(1)
+tree3.insert(6)
+tree3.insert(8)
+tree3.insert(10)
+
 //console.log(tree.find(8))
 //tree.traversePostOrder()
 //console.log(tree.height())
 //console.log(tree.min())
 //console.log(tree.equals(tree2))
-
+//tree.swapRoot()
+//console.log(tree.validate())
+console.log(tree.getNodesFromKDistance(2))
 
 // f(3)
 //   3 * f(2)
