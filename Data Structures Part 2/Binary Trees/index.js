@@ -1,5 +1,5 @@
 
-class BinarySearchTree {
+class BinaryTree {
     #root = null
 
     #Node = class {
@@ -40,6 +40,24 @@ class BinarySearchTree {
         }
     }
 
+    equals(other) {
+        if (other === null) 
+            return false
+        return this.#equals(this.#root, other.getRoot())
+    }
+
+    #equals(firstNode, secondNode) {
+        if (firstNode === null && secondNode === null) 
+            return true
+
+        if (firstNode !== null && secondNode !== null) 
+            return firstNode.value === secondNode.value 
+                    && this.#equals(firstNode.leftChild, secondNode.leftChild) 
+                    && this.#equals(firstNode.rightChild, secondNode.rightChild)
+        
+        return false // if one of the two nodes is null, that means the trees are not equal
+    }
+
     find(value) {
         let currentNode = this.#root
         while (currentNode !== null) {
@@ -56,18 +74,44 @@ class BinarySearchTree {
         return false
     }
 
+    getRoot() {
+        return this.#root
+    }
+
+    
     height() {
         if (this.#root === null) 
             return -1
-
+        
         return this.#height(this.#root)
     }
-
+    
     #height(root) {
-        if (root.leftChild === null && root.rightChild === null)
+        if (this.#isLeaf(root))
             return 0
-
+        
         return 1 + Math.max(this.#height(root.leftChild), this.#height(root.rightChild))
+    }
+
+    #isLeaf(node) {
+        return node.leftChild === null && node.rightChild === null
+    }
+
+    min() {
+        return this.#min(this.#root)
+    }
+
+    // This is if we're not dealing with a binary search tree
+    // In a binary search tree, we just find the leftmost leaf node
+    // O(n)
+    #min(root) {
+        if (this.#isLeaf(root))
+            return root.value
+
+        let left = this.#min(root.leftChild)
+        let right = this.#min(root.rightChild)
+
+        return Math.min(Math.min(left, right), root.value)
     }
 
     traversePreOrder() {
@@ -110,17 +154,28 @@ class BinarySearchTree {
     }
 }
 
-let bst = new BinarySearchTree()
-bst.insert(7)
-bst.insert(4)
-bst.insert(9)
-bst.insert(1)
-bst.insert(6)
-bst.insert(8)
-bst.insert(10)
-//console.log(bst.find(8))
-//bst.traversePostOrder()
-console.log(bst.height())
+let tree = new BinaryTree()
+tree.insert(7)
+tree.insert(4)
+tree.insert(9)
+tree.insert(1)
+tree.insert(6)
+tree.insert(8)
+tree.insert(10)
+
+let tree2 = new BinaryTree()
+tree2.insert(7)
+tree2.insert(4)
+tree2.insert(9)
+tree2.insert(1)
+tree2.insert(6)
+tree2.insert(8)
+tree2.insert(10)
+//console.log(tree.find(8))
+//tree.traversePostOrder()
+//console.log(tree.height())
+//console.log(tree.min())
+//console.log(tree.equals(tree2))
 
 
 // f(3)
