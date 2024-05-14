@@ -138,6 +138,14 @@ class BinaryTree {
         return Math.min(Math.min(left, right), root.value)
     }
 
+    traverseLevelOrder() {
+        for (let i = 0; i <= this.height(); i++) {
+            let list = this.getNodesFromKDistance(i)
+            for (let j = 0; j < list.length; j++) 
+                console.log(list[j])
+        }
+    }
+
     traversePreOrder() {
         this.#traversePreOrder(this.#root)
     }
@@ -227,7 +235,8 @@ tree3.insert(10)
 //console.log(tree.equals(tree2))
 //tree.swapRoot()
 //console.log(tree.validate())
-console.log(tree.getNodesFromKDistance(2))
+//console.log(tree.getNodesFromKDistance(2))
+tree.traverseLevelOrder()
 
 // f(3)
 //   3 * f(2)
