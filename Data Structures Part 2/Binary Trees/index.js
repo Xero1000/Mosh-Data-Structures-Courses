@@ -40,30 +40,13 @@ class BinaryTree {
         }
     }
 
-    equals(other) {
-        if (other === null) 
-            return false
-        return this.#equals(this.#root, other.getRoot())
-    }
-
-    #equals(firstNode, secondNode) {
-        if (firstNode === null && secondNode === null) 
-            return true
-
-        if (firstNode !== null && secondNode !== null) 
-            return firstNode.value === secondNode.value 
-                    && this.#equals(firstNode.leftChild, secondNode.leftChild) 
-                    && this.#equals(firstNode.rightChild, secondNode.rightChild)
-        
-        return false // if one of the two nodes is null, that means the trees are not equal
-    }
-
+    
     swapRoot() {
         let temp = this.#root.leftChild.value
         this.#root.leftChild.value = this.#root.rightChild.value
         this.#root.rightChild.value = temp
     }
-
+    
     find(value) {
         let currentNode = this.#root
         while (currentNode !== null) {
@@ -84,12 +67,91 @@ class BinaryTree {
         return this.#root
     }
 
+    areSiblings(value1, value2) {
+        return this.#areSiblings(this.#root, value1, value2)
+    }
+
+    #areSiblings(root, value1, value2) {
+        if (this.#root === null) 
+            return false
+        if (root.leftChild === null || root.rightChild === null)
+            return false
+        if ((root.leftChild.value === value1 && root.rightChild.value === value2) || (root.leftChild.value === value2 && root.rightChild.value === value1)) 
+            return true
+
+        return this.#areSiblings(root.leftChild, value1, value2) || this.#areSiblings(root.rightChild, value1, value2)
+    }
+
+    contains(value) {
+        return this.#contains(this.#root, value)
+    }
+
+    #contains(root, value) {
+        if (root === null) 
+            return false
+        if (root.value === value)
+            return true
+
+        return this.#contains(root.leftChild, value) || this.#contains(root.rightChild, value)
+    }
+
+    countLeaves() {
+        return this.#countLeaves(this.#root)
+    }
+
+    #countLeaves(root) {
+        if (root === null) 
+            return 0
+        if (this.#isLeaf(root)) 
+            return 1
+
+        return this.#countLeaves(root.leftChild) + this.#countLeaves(root.rightChild)
+    }
+
+    equals(other) {
+        if (other === null) 
+            return false
+        return this.#equals(this.#root, other.getRoot())
+    }
+
+    #equals(firstNode, secondNode) {
+        if (firstNode === null && secondNode === null) 
+            return true
+
+        if (firstNode !== null && secondNode !== null) 
+            return firstNode.value === secondNode.value 
+                    && this.#equals(firstNode.leftChild, secondNode.leftChild) 
+                    && this.#equals(firstNode.rightChild, secondNode.rightChild)
+        
+        return false // if one of the two nodes is null, that means the trees are not equal
+    }
+
+    getAncestors(value) {
+        let list = []
+        this.#getAncestors(this.#root, value, list)
+        return list
+    }
+
+    #getAncestors(root, value, list) {
+        if (root === null)
+            return false
+
+        if (root.value === value)
+            return true
+
+        if (this.#getAncestors(root.leftChild, value, list) || this.#getAncestors(root.rightChild, value, list)) {
+            list.push(root.value)
+            return true
+        }
+        return false
+    }
+    
     getNodesFromKDistance(k) {
         let list = []
         this.#getNodesFromKDistance(this.#root, k, list)
         return list
     }
-
+    
     #getNodesFromKDistance(root, k, list) {
         if (root === null) 
             return
@@ -97,11 +159,11 @@ class BinaryTree {
             list.push(root.value)
             return
         }
-
+        
         this.#getNodesFromKDistance(root.leftChild, k - 1, list) 
         this.#getNodesFromKDistance(root.rightChild, k - 1, list)
     }
-
+    
     
     height() {
         if (this.#root === null) 
@@ -116,28 +178,54 @@ class BinaryTree {
         
         return 1 + Math.max(this.#height(root.leftChild), this.#height(root.rightChild))
     }
-
+    
     #isLeaf(node) {
         return node.leftChild === null && node.rightChild === null
     }
 
+    max() {
+        return this.#max(this.#root)
+    }
+
+    #max(root) {
+        if (root === null) 
+            throw new Error("Tree is empty")
+        if (root.rightChild === null)
+            return root.value
+
+        return this.#max(root.rightChild)
+    }
+    
     min() {
         return this.#min(this.#root)
     }
-
+    
     // This is if we're not dealing with a binary search tree
     // In a binary search tree, we just find the leftmost leaf node
     // O(n)
     #min(root) {
         if (this.#isLeaf(root))
             return root.value
-
+        
         let left = this.#min(root.leftChild)
         let right = this.#min(root.rightChild)
-
+        
         return Math.min(Math.min(left, right), root.value)
     }
 
+    size() {
+        return this.#size(this.#root)
+    }
+
+    #size(root) {
+        if (root === null)
+            return 0
+        if (this.#isLeaf(root))
+            return 1
+
+        return 1 + this.#size(root.leftChild) + this.#size(root.rightChild)
+    }
+    
     traverseLevelOrder() {
         for (let i = 0; i <= this.height(); i++) {
             let list = this.getNodesFromKDistance(i)
@@ -236,7 +324,12 @@ tree3.insert(10)
 //tree.swapRoot()
 //console.log(tree.validate())
 //console.log(tree.getNodesFromKDistance(2))
-tree.traverseLevelOrder()
+//tree.traverseLevelOrder()
+//console.log(tree.size())
+//console.log(tree.countLeaves())
+//console.log(tree.find(8))
+//console.log(tree.areSiblings(1, 6))
+console.log(tree.getAncestors(1))
 
 // f(3)
 //   3 * f(2)
